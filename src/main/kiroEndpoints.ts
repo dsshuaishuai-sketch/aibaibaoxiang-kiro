@@ -4,6 +4,7 @@
 // 同一套 UA、同一套区域映射规则。统一收在这里，避免各处各写一份导致漂移。
 import { execFileSync } from 'child_process'
 import { createHash, randomUUID } from 'crypto'
+import { machineIdForToken } from './accountIdentity'
 import { readFileSync } from 'fs'
 import * as os from 'os'
 import * as path from 'path'
@@ -162,17 +163,22 @@ export function codeWhispererEndpoint(region?: string): string {
   return `https://codewhisperer.${serviceRegion(region)}.amazonaws.com`
 }
 
-/** `KiroIDE-<版本>-<机器码>`，两种 UA 共用，保证不会一个带机器码一个不带 */
-function kiroIdeTag(): string {
-  return `KiroIDE-${KIRO_IDE_VERSION}-${kiroMachineId()}`
+/**
+ * `KiroIDE-<版本>-<机器码>`，两种 UA 共用，保证不会一个带机器码一个不带。
+ *
+ * 传了 token 且命中「按账号隔离机器码」登记表时用该账号的独立机器码，
+ * 否则回落到系统机器码（与官方 IDE 同机同值）。
+ */
+function kiroIdeTag(token?: string): string {
+  return `KiroIDE-${KIRO_IDE_VERSION}-${machineIdForToken(token) || kiroMachineId()}`
 }
 
 /** 完整 UA，AWS SDK 风格 + Kiro IDE 版本与机器码 */
-export function kiroUserAgent(): string {
+export function kiroUserAgent(token?: string): string {
   return (
     `aws-sdk-js/${AWS_SDK_VERSION} ua/2.1 os/${UA_OS}#${os.release()} lang/js ` +
     `md/nodejs#${process.versions.node} api/codewhispererstreaming#${AWS_SDK_VERSION} ` +
-    `m/E ${kiroIdeTag()}`
+    `m/E ${kiroIdeTag(token)}`
   )
 }
 
@@ -180,8 +186,8 @@ export function kiroUserAgent(): string {
  * x-amz-user-agent 用的短 UA。
  * 用短横连接，和官方 UA 的写法一致；不要写成空格分隔（`KiroIDE 0.12.155 <id>`）。
  */
-export function kiroAmzUserAgent(): string {
-  return `aws-sdk-js/${AWS_SDK_VERSION} ${kiroIdeTag()}`
+export function kiroAmzUserAgent(token?: string): string {
+  return `aws-sdk-js/${AWS_SDK_VERSION} ${kiroIdeTag(token)}`
 }
 
 /** AWS SDK 的单次调用标识（uuid v4） */

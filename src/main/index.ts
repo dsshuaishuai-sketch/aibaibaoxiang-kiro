@@ -1,8 +1,9 @@
 import { app, dialog, ipcMain, nativeImage, screen, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
+import { randomBytes } from 'crypto'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { applyRuntimeSettings, registerIpc } from './ipc'
-import { flushStore, getSettings } from './store'
+import { flushStore, getSettings, setSettings } from './store'
 import { normalizePortalLocale } from '../shared/portalLocale'
 import { closePortalWindow } from './kiroPortal'
 import {
@@ -229,6 +230,13 @@ app.whenReady().then(() => {
   // 日志中心要最先启动，后面各模块的启动日志才不会漏
   initLogger((total) => sendToRenderer(mainWindow, 'log:appended', total))
   installConsoleBridge()
+
+  // 按账号机器码的盐：首次启动生成一次并落盘，之后恒定，
+  // 保证同一账号跨重启拿到同一个机器码。
+  const bootSettings = getSettings()
+  if (!bootSettings.machineIdSalt) {
+    setSettings({ machineIdSalt: randomBytes(16).toString('hex') })
+  }
 
   // 开发态的 Dock 图标默认是 Electron 的，手动换成应用图标。
   // 打包后由 .app 里的 icns 提供，这里不覆盖，避免二次缩放变糊。

@@ -1263,6 +1263,14 @@ export interface AppSettings {
   usagePrecision: boolean
   /** 在线登录默认用无痕窗口打开 */
   loginPrivateMode: boolean
+  /**
+   * 按账号隔离 UA 里的机器码。
+   * 开启后每个账号发出 `KiroIDE-<版本>-<机器码>` 用的是自己独立的稳定机器码
+   * （sha256(salt:accountId)），不再全机共用系统设备标识，避免多号被串。
+   */
+  perAccountMachineId: boolean
+  /** 派生按账号机器码用的盐，首次启动生成一次，之后不再变 */
+  machineIdSalt: string
   /** 记住上次填写的 Enterprise SSO 地址与区域 */
   enterpriseStartUrl: string
   enterpriseRegion: string
@@ -1353,6 +1361,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
   privacyMode: false,
   usagePrecision: false,
   loginPrivateMode: false,
+  // 默认开启：多号同机时不共用同一个机器码，属于纯增益
+  perAccountMachineId: true,
+  machineIdSalt: '',
   enterpriseStartUrl: '',
   enterpriseRegion: DEFAULT_REGION,
   autoRefresh: true,

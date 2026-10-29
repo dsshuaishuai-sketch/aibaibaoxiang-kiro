@@ -41,8 +41,8 @@ function authHeaders(accessToken: string, target: string): Record<string, string
     'Content-Type': 'application/json',
     Authorization: `Bearer ${accessToken}`,
     'x-amz-target': `${SERVICE}.${target}`,
-    'User-Agent': kiroUserAgent(),
-    'x-amz-user-agent': kiroAmzUserAgent(),
+    'User-Agent': kiroUserAgent(accessToken),
+    'x-amz-user-agent': kiroAmzUserAgent(accessToken),
     'amz-sdk-invocation-id': awsInvocationId(),
     ...AWS_SINGLE_ATTEMPT_HEADERS
   }

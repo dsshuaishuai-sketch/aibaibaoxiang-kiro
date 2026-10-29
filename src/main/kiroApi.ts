@@ -140,7 +140,7 @@ async function cborRequest<T>(
       'smithy-protocol': 'rpc-v2-cbor',
       'amz-sdk-invocation-id': awsInvocationId(),
       ...AWS_SINGLE_ATTEMPT_HEADERS,
-      'x-amz-user-agent': kiroAmzUserAgent(),
+      'x-amz-user-agent': kiroAmzUserAgent(accessToken),
       authorization: `Bearer ${accessToken}`,
       cookie: `Idp=${idp}; AccessToken=${accessToken}`
     },
@@ -241,8 +241,8 @@ function toIso(value: number | string | undefined): string | undefined {
 function bearerHeaders(accessToken: string): Record<string, string> {
   return {
     Authorization: `Bearer ${accessToken}`,
-    'User-Agent': kiroUserAgent(),
-    'x-amz-user-agent': kiroAmzUserAgent()
+    'User-Agent': kiroUserAgent(accessToken),
+    'x-amz-user-agent': kiroAmzUserAgent(accessToken)
   }
 }
 

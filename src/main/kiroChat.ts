@@ -55,8 +55,8 @@ export function authHeaders(accessToken: string): Record<string, string> {
   return {
     'content-type': 'application/json',
     Authorization: `Bearer ${accessToken}`,
-    'user-agent': kiroUserAgent(),
-    'x-amz-user-agent': kiroAmzUserAgent(),
+    'user-agent': kiroUserAgent(accessToken),
+    'x-amz-user-agent': kiroAmzUserAgent(accessToken),
     'x-amzn-kiro-agent-mode': 'vibe',
     'amz-sdk-invocation-id': awsInvocationId(),
     ...AWS_SINGLE_ATTEMPT_HEADERS

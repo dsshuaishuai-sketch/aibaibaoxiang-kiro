@@ -20,6 +20,11 @@ import {
   type SubscriptionType
 } from '../shared/types'
 import { normalizeSubscriptionType } from '../shared/subscription'
+import {
+  configureAccountIdentity,
+  registerAccountIdentity
+} from './accountIdentity'
+import type { Account } from '../shared/types'
 
 /** permissions.yaml 开启前的原始状态 */
 export interface ShellApproveYamlBackup {
@@ -488,11 +493,23 @@ function alignSubscriptionTypes(data: AccountStoreData): AccountStoreData {
   return data
 }
 
+/**
+ * 把账号当前 accessToken 登记到「按账号机器码」注册表。
+ * 只读视图与副本两条路都要登记，否则反代选号拿到账号时查不到机器码。
+ */
+function registerAccountIdentities(accounts: readonly Account[]): void {
+  for (const acc of accounts) {
+    registerAccountIdentity(acc.id, acc.credentials?.accessToken)
+  }
+}
+
 /** 账号数据的独立副本：调用方可以修改，改完经 setAccountData 落盘 */
 export function getAccountData(): AccountStoreData {
   const data = read('accountData') as AccountStoreData | undefined
   if (!data || !Array.isArray(data.accounts)) return EMPTY_DATA
-  return alignSubscriptionTypes(data)
+  const aligned = alignSubscriptionTypes(data)
+  registerAccountIdentities(aligned.accounts)
+  return aligned
 }
 
 /**
@@ -502,7 +519,9 @@ export function getAccountData(): AccountStoreData {
 export function viewAccountData(): Readonly<AccountStoreData> {
   const data = peek('accountData') as AccountStoreData | undefined
   if (!data || !Array.isArray(data.accounts)) return EMPTY_DATA
-  return alignSubscriptionTypes(data)
+  const aligned = alignSubscriptionTypes(data)
+  registerAccountIdentities(aligned.accounts)
+  return aligned
 }
 
 export async function setAccountData(data: AccountStoreData): Promise<void> {
@@ -547,6 +566,11 @@ export function getSettings(): AppSettings {
   }
   // 存值不是十六进制色值（如 system）时回到默认紫
   if (!/^#[0-9a-f]{6}$/i.test(merged.primaryColor)) merged.primaryColor = DEFAULT_PRIMARY_COLOR
+  // 每次读设置都同步一次开关与盐：界面改完立即生效，不必重启
+  configureAccountIdentity({
+    enabled: merged.perAccountMachineId === true,
+    salt: merged.machineIdSalt || ''
+  })
   return merged
 }
 

@@ -446,6 +446,13 @@ function resetAll(): void {
         <a-form-item label="积分两位小数">
           <SettingSwitch field="usagePrecision" />
         </a-form-item>
+        <a-form-item label="按账号隔离机器码" class="field-inline">
+          <SettingSwitch field="perAccountMachineId" />
+          <span class="muted">
+            每个账号用自己的稳定设备标识（KiroIDE 请求头里的机器码），不再全机共用一个；
+            多号同机时能降低被串号的风险，改完立即生效
+          </span>
+        </a-form-item>
       </a-form>
     </a-card>
 
