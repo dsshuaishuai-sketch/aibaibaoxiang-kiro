@@ -17,6 +17,7 @@ import {
   WarningOutlined
 } from '@ant-design/icons-vue'
 import kiroLogo from '@/assets/kiro-logo.png'
+import { APP_DISPLAY_NAME } from '@shared/brand'
 import { useAccountsStore } from '@/stores/accounts'
 import { useSettingsStore } from '@/stores/settings'
 import {
@@ -326,9 +327,9 @@ function previewOf(list: Account[]): string {
       <span class="hero-blob hero-blob-a" />
       <span class="hero-blob hero-blob-b" />
       <div class="hero-main">
-        <img class="hero-logo" :src="kiroLogo" alt="Kiro Manager Lite" />
+        <img class="hero-logo" :src="kiroLogo" :alt="APP_DISPLAY_NAME" />
         <div>
-          <h1 class="hero-title">欢迎使用 Kiro Manager Lite</h1>
+          <h1 class="hero-title">欢迎使用 {{ APP_DISPLAY_NAME }}</h1>
           <p class="hero-sub muted">管理你的 Kiro IDE 账号，一键切换，高效开发</p>
         </div>
       </div>

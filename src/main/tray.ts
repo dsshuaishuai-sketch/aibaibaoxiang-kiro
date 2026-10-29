@@ -1,5 +1,6 @@
 // 系统托盘（macOS 菜单栏）：展示当前账号信息，提供刷新 / 切号 / 显示窗口 / 退出
 import { Tray, Menu, app, clipboard, nativeImage } from 'electron'
+import { APP_DISPLAY_NAME } from '../shared/brand'
 import type { MenuItemConstructorOptions, NativeImage } from 'electron'
 import { join } from 'path'
 import type { TrayAction, TraySnapshot } from '../shared/types'
@@ -49,7 +50,7 @@ function disabled(label: string, iconName?: string): MenuItemConstructorOptions 
 
 function buildMenu(): Menu {
   const items: MenuItemConstructorOptions[] = [
-    disabled(`Kiro Manager Lite v${app.getVersion()}`, 'app'),
+    disabled(`${APP_DISPLAY_NAME} v${app.getVersion()}`, 'app'),
     { type: 'separator' },
     disabled(
       snapshot.email ? `已登录：${snapshot.email}` : '当前未登录 Kiro IDE',
@@ -116,7 +117,7 @@ function buildMenu(): Menu {
 function refreshMenu(): void {
   tray?.setContextMenu(buildMenu())
   tray?.setToolTip(
-    snapshot.email ? `Kiro Manager Lite · ${snapshot.email}` : 'Kiro Manager Lite · 未登录'
+    snapshot.email ? `${APP_DISPLAY_NAME} · ${snapshot.email}` : `${APP_DISPLAY_NAME} · 未登录`
   )
 }
 

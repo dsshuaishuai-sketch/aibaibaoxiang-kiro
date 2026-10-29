@@ -1,7 +1,7 @@
 {
   "name": "kiro-account-lite",
   "version": "1.0.40",
-  "description": "Kiro Manager Lite - Kiro 多账号管理器轻量版",
+  "description": "Ai百宝箱kiro登陆工具",
   "main": "./out/main/index.js",
   "author": "kiro-account-lite",
   "license": "AGPL-3.0",

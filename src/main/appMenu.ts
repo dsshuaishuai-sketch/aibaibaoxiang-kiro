@@ -7,9 +7,10 @@ import type { BrowserWindow, MenuItemConstructorOptions } from 'electron'
 import { release, type as osType } from 'os'
 import { closeKiroIde, openKiroIde } from './kiroProcess'
 import { sendToRenderer } from './utils'
+import { APP_DISPLAY_NAME } from '../shared/brand'
 
 /** 菜单里展示的应用名（打包后的 productName，不跟随 package.json 的包名） */
-const APP_NAME = 'Kiro Manager Lite'
+const APP_NAME = APP_DISPLAY_NAME
 
 interface AppMenuDeps {
   /** 把主窗口带到前台（隐藏到托盘时也能唤回） */

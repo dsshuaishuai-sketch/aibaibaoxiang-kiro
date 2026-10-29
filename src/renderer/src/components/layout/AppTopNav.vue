@@ -4,6 +4,7 @@
  * 菜单项与跳转逻辑和左侧导航栏共用 useAppNav。
  */
 import kiroLogo from '@/assets/kiro-logo.png'
+import { APP_DISPLAY_NAME } from '@shared/brand'
 import ThemeModeIcon from '@/components/common/ThemeModeIcon.vue'
 import { useSettingsStore } from '@/stores/settings'
 import { useUpdateStore } from '@/stores/update'
@@ -18,7 +19,7 @@ const { items, selectedKeys, navigate, goHome, darkModeLabel, toggleDark } = use
   <header class="app-topnav">
     <!-- 点 logo 回主页；点「新版本」角标打开更新弹窗 -->
     <div class="topnav-logo" role="link" aria-label="回到主页" @click="goHome">
-      <img class="brand-logo" :src="kiroLogo" alt="Kiro Manager Lite" />
+      <img class="brand-logo" :src="kiroLogo" :alt="APP_DISPLAY_NAME" />
       <span v-if="updateStore.hasUpdate" class="topnav-badge" @click.stop="updateStore.showModal">新版本</span>
     </div>
 

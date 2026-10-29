@@ -5,6 +5,7 @@ import * as http from 'http'
 import { setProtocolClient } from './appProtocol'
 import { openUrl } from './browser'
 import { errorMessage } from '../shared/errors'
+import { APP_DISPLAY_NAME } from '../shared/brand'
 import { KIRO_AUTH_BASE, KIRO_OIDC_SCOPES, KIRO_START_URL, oidcEndpoint } from './kiroEndpoints'
 import { httpRequest, type HttpResponse } from './net'
 import { DEFAULT_REGION } from '../shared/regions'
@@ -175,7 +176,7 @@ async function registerOidcClient(
   redirectUris?: string[]
 ): Promise<{ clientId: string; clientSecret: string }> {
   const res = await postJson(`${oidcEndpoint(region)}/client/register`, {
-    clientName: 'Kiro Manager Lite',
+    clientName: APP_DISPLAY_NAME,
     clientType: 'public',
     scopes: KIRO_OIDC_SCOPES,
     grantTypes,
@@ -418,7 +419,7 @@ function callbackPage(title: string, detail: string, ok = true): string {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${title} · Kiro Manager Lite</title>
+<title>${title} · ${APP_DISPLAY_NAME}</title>
 <style>
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
@@ -455,9 +456,9 @@ function callbackPage(title: string, detail: string, ok = true): string {
     <div class="icon">${icon}</div>
     <h1>${title}</h1>
     <p>${detail}</p>
-    <button id="back" type="button">打开 Kiro Manager Lite</button>
-    <div class="hint" id="hint">已唤起 Kiro Manager Lite，可以关闭此标签页了。</div>
-    <div class="brand">Kiro Manager Lite</div>
+    <button id="back" type="button">打开 ${APP_DISPLAY_NAME}</button>
+    <div class="hint" id="hint">已唤起 ${APP_DISPLAY_NAME}，可以关闭此标签页了。</div>
+    <div class="brand">${APP_DISPLAY_NAME}</div>
   </div>
 </body>
 <script>
@@ -544,7 +545,7 @@ export async function startEnterpriseLogin(
       return finish('授权失败', '未收到授权码，请回到应用重试。', false)
     }
 
-    finish('授权成功', '正在获取令牌，可以关闭此页面并返回 Kiro Manager Lite。')
+    finish('授权成功', `正在获取令牌，可以关闭此页面并返回 ${APP_DISPLAY_NAME}。`)
 
     try {
       const tokenRes = await postJson(`${oidcEndpoint(region)}/token`, {

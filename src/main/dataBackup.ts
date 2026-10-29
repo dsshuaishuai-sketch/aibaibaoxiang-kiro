@@ -35,6 +35,7 @@ import { flushUsageHistory } from './usageHistory'
 import { flushGatewayHistory } from './gatewayHistory'
 import { flushProxyData } from './proxyServer'
 import type { AccountStoreData, DataBackupSummary, KeyGatewayData, ProxyApiKey } from '../shared/types'
+import { APP_DISPLAY_NAME } from '../shared/brand'
 
 const FORMAT = 'kiro-manager-lite-data'
 /** 当前写出的结构版本；读到更大的版本仍按已知字段导入，并在摘要里提示 */
@@ -153,7 +154,7 @@ export function parseBackup(text: string): DataFile {
     throw new Error('无法读取该文件：不是有效的 JSON，或文件已损坏')
   }
   if (!isObject(parsed) || parsed.format !== FORMAT || !isObject(parsed.sections)) {
-    throw new Error('该文件不是 Kiro Manager Lite 导出的数据文件')
+    throw new Error(`该文件不是 ${APP_DISPLAY_NAME} 导出的数据文件`)
   }
   const version = typeof parsed.schemaVersion === 'number' ? parsed.schemaVersion : 1
   return migrate({ ...(parsed as DataFile), schemaVersion: version })

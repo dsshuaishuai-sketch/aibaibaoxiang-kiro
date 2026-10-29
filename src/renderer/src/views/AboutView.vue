@@ -14,6 +14,8 @@ import {
 import { useSettingsStore } from '@/stores/settings'
 import { useUpdateStore } from '@/stores/update'
 import kiroLogo from '@/assets/kiro-logo.png'
+import { APP_DISPLAY_NAME, CONTACT_WECHAT } from '@shared/brand'
+import { copyText } from '@/utils/ui'
 import qqGroup from '@/assets/qq-group.png'
 import authorAvatar from '@/assets/author_avatar.jpg'
 import sponsorWechat from '@/assets/sponsor_wechat.jpg'
@@ -123,6 +125,10 @@ const credits = [
 function open(url: string): void {
   void window.api.openExternal(url)
 }
+
+function copyWechat(): void {
+  copyText(CONTACT_WECHAT, '微信号已复制')
+}
 </script>
 
 <template>
@@ -132,14 +138,16 @@ function open(url: string): void {
       <span class="hero-blob hero-blob-a" />
       <span class="hero-blob hero-blob-b" />
       <div class="hero-main">
-        <img class="hero-logo" :src="kiroLogo" alt="Kiro Manager Lite" />
-        <h2 class="hero-title">Kiro Manager Lite</h2>
+        <img class="hero-logo" :src="kiroLogo" :alt="APP_DISPLAY_NAME" />
+        <h2 class="hero-title">{{ APP_DISPLAY_NAME }}</h2>
         <p class="hero-version muted">版本 {{ info?.version || '-' }}</p>
+        <p class="hero-contact">微信号 {{ CONTACT_WECHAT }}</p>
         <a-space :size="12" wrap class="hero-actions">
           <a-button :loading="checking" @click="checkUpdate">
             <template #icon><SyncOutlined /></template>
             检查更新
           </a-button>
+          <a-button @click="copyWechat">复制微信号</a-button>
           <a-button @click="groupOpen = true">
             <template #icon><CommentOutlined /></template>
             加入交流群
@@ -176,6 +184,9 @@ function open(url: string): void {
       <p class="intro-text">
         本应用使用 Electron + Vue 3 + TypeScript 开发，支持 Windows、macOS 和 Linux 平台。
         所有账号数据均加密保存在本机，不会上传到任何服务器。
+      </p>
+      <p class="intro-text">
+        本版本于 2026-10-30 修改自 Kiro Manager Lite，许可证仍为 AGPL-3.0。联系微信号 {{ CONTACT_WECHAT }}。
       </p>
     </a-card>
 
@@ -442,8 +453,14 @@ function open(url: string): void {
 }
 
 .hero-version {
-  margin: 0 0 24px;
+  margin: 0 0 8px;
   font-size: 13px;
+}
+
+.hero-contact {
+  margin: 0 0 20px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* ============ 检查更新弹窗 ============ */

@@ -5,6 +5,12 @@
 <h1 align="center">Kiro Manager Lite</h1>
 
 <p align="center">
+  本地修改版界面名称为「Ai百宝箱kiro登陆工具」（2026-10-30）。上游项目仍是本仓库所基于的
+  <a href="https://github.com/lucks-cloud/kiro-manager-lite">lucks-cloud/kiro-manager-lite</a>，
+  许可证保持 AGPL-3.0。联系微信号：Diss5211111。
+</p>
+
+<p align="center">
   <strong>Kiro 多账号与 API Key 管理器轻量版</strong>
 </p>
 

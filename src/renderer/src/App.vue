@@ -13,6 +13,7 @@ import { useAccountsStore } from '@/stores/accounts'
 import { useKeysStore } from '@/stores/keys'
 import { useUpdateStore } from '@/stores/update'
 import { useTrayBridge } from '@/utils/tray'
+import { APP_DISPLAY_NAME } from '@shared/brand'
 
 const settingsStore = useSettingsStore()
 const accountsStore = useAccountsStore()
@@ -32,7 +33,7 @@ function confirmQuit(): void {
   if (quitConfirmOpen) return
   quitConfirmOpen = true
   Modal.confirm({
-    title: '退出 Kiro Manager Lite',
+    title: `退出 ${APP_DISPLAY_NAME}`,
     content: '退出后自动刷新与 IDE 主动续期都会停止，托盘图标也会一起关闭。',
     okText: '退出',
     // 实心红：okType: 'danger' 只是描边红，退出这种确认要更醒目
@@ -102,7 +103,7 @@ watch(
 watch(
   () => settingsStore.appInfo?.version,
   (version) => {
-    document.title = version ? `Kiro Manager Lite v${version}` : 'Kiro Manager Lite'
+    document.title = version ? `${APP_DISPLAY_NAME} v${version}` : APP_DISPLAY_NAME
   },
   { immediate: true }
 )

@@ -143,6 +143,7 @@ import {
   updateKeyRegion
 } from './keyService'
 import { errorMessage } from '../shared/errors'
+import { APP_DISPLAY_NAME } from '../shared/brand'
 import {
   deleteAccountData,
   viewAccountData,
@@ -928,7 +929,7 @@ export function registerIpc(getWindow: () => BrowserWindow | null): void {
     if (!app.isPackaged) {
       dialog.showMessageBoxSync({
         type: 'info',
-        title: 'Kiro Manager Lite',
+        title: APP_DISPLAY_NAME,
         message: '数据已处理完成',
         detail: '开发模式下无法自动重启（dev server 会随应用一起退出），请重新运行 npm run dev。'
       })
@@ -948,7 +949,7 @@ export function registerIpc(getWindow: () => BrowserWindow | null): void {
     const result = await dialog.showSaveDialog(getWindow()!, {
       title: '导出数据',
       defaultPath: join(app.getPath('downloads'), `kiro-manager-lite-${stamp}.json`),
-      filters: [{ name: 'Kiro Manager Lite 数据', extensions: ['json'] }]
+      filters: [{ name: `${APP_DISPLAY_NAME} 数据`, extensions: ['json'] }]
     })
     if (result.canceled || !result.filePath) return ok({ saved: false })
     // Windows 上用户改名时可能把后缀删了，补回来，否则导入时选不到
@@ -968,7 +969,7 @@ export function registerIpc(getWindow: () => BrowserWindow | null): void {
     const result = await dialog.showOpenDialog(getWindow()!, {
       title: '导入数据',
       properties: ['openFile'],
-      filters: [{ name: 'Kiro Manager Lite 数据', extensions: ['json'] }]
+      filters: [{ name: `${APP_DISPLAY_NAME} 数据`, extensions: ['json'] }]
     })
     const file = result.filePaths[0]
     if (result.canceled || !file) return ok(null)

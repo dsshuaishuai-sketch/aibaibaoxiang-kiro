@@ -13,6 +13,7 @@ import {
   SnippetsOutlined,
   TableOutlined
 } from '@ant-design/icons-vue'
+import { APP_DISPLAY_NAME } from '@shared/brand'
 import { useAccountsStore } from '@/stores/accounts'
 import { useSettingsStore } from '@/stores/settings'
 import {
@@ -57,7 +58,7 @@ const scopeText = computed(
 )
 
 const formats = computed<{ value: ExportFormat; label: string; icon: Component; desc: string }[]>(() => [
-  { value: 'json', label: 'JSON', icon: FileOutlined, desc: '完整数据，可用于导入，完美适配Kiro Manager Lite。' },
+  { value: 'json', label: 'JSON', icon: FileOutlined, desc: `完整数据，可用于导入，完美适配${APP_DISPLAY_NAME}。` },
   {
     value: 'oidc',
     label: 'OIDC JSON（兼容性高）',

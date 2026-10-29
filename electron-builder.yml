@@ -1,5 +1,5 @@
 appId: dev.kiro.account.lite
-productName: Kiro Manager Lite
+productName: Ai百宝箱kiro登陆工具
 directories:
   buildResources: build
 # 不按 Electron ABI 重建原生模块：全项目唯一的原生依赖是 cbor-x 的可选加速模块
